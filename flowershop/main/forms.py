@@ -10,3 +10,8 @@ class UserRegisterForm(UserCreationForm):
 class Meta:
     model = User
     fields = ['username', 'email', 'password1', 'password2']
+
+
+class OrderForm(forms.Form):
+    name = forms.CharField(label='Имя', max_length=100)
+    address = forms.CharField(label='Адрес доставки', max_length=255)

@@ -9,4 +9,7 @@ urlpatterns = [
     path('catalog/', views.catalog, name='catalog'),
     path('order/', views.order, name='order'),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('order/', views.order, name='order'),
+    path('buyform', views.buyform, name='buyform'),
+    path('send_to_telegram/', views.send_to_telegram, name='send_to_telegram'),
 ]
