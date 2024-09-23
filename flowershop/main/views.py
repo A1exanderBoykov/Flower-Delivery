@@ -5,6 +5,8 @@ from .models import Flower, Order
 from django.http import JsonResponse
 from django.http import HttpResponse
 from .forms import OrderForm
+from django.contrib import messages
+from .forms import UserRegisterForm
 
 import requests
 
@@ -15,12 +17,14 @@ def home(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account created for {username}!')
             return redirect('home')
     else:
-        form = UserCreationForm()
+        form = UserRegisterForm()
     return render(request, 'main/register.html', {'form': form})
 
 def catalog(request):
@@ -55,11 +59,12 @@ def send_to_telegram(request):
         chat_id = '686562348'
         telegram_url = f'https://api.telegram.org/bot{telegram_token}/sendMessage'
 
-        text = f"Имя: {name}\nСообщение: {message}"
+        text = f"Подтверждение Вашего заказа: {name} в магазине Flower-Delivery \nАдрес доставки: {message}"
 
         requests.post(telegram_url, data={'chat_id': chat_id, 'text': text})
 
         return render(request, 'main/catalog.html', {'catalog': catalog})
     else:
         return HttpResponse("Используйте POST запрос для отправки данных.")
+
 
